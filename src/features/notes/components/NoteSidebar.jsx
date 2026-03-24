@@ -41,19 +41,40 @@ export const NoteSidebar = ({ note, activeTab, setActiveTab }) => {
       {/* Action Buttons */}
       <div className="space-y-3 mb-8">
         {note.isPremium ? (
-          <Button size="lg" className="w-full text-lg shadow-xl shadow-brand-900/20">
+          <Button size="lg" className="w-full text-lg shadow-xl shadow-brand-900/20"
+            onClick={() => alert('Premium content - payment integration coming soon!')}
+          >
             <Lock size={18} className="mr-2" /> Unlock Now
           </Button>
         ) : (
-          <Button size="lg" className="w-full text-lg shadow-xl shadow-brand-900/20 bg-green-600 hover:bg-green-700">
+          <Button size="lg" className="w-full text-lg shadow-xl shadow-brand-900/20 bg-green-600 hover:bg-green-700"
+            onClick={() => {
+              const link = document.createElement('a');
+              link.href = note.fileUrl || '#';
+              link.download = `${note.title}.pdf`;
+              if (note.fileUrl) {
+                link.click();
+              } else {
+                alert('PDF will be available once uploaded by admin. Contact A.I.S. for study material.');
+              }
+            }}
+          >
             <Download size={18} className="mr-2" /> Download Full PDF
           </Button>
         )}
-        
-        <Button 
-          variant="secondary" 
-          className="w-full border-gray-200 bg-white text-gray-700 hover:bg-gray-50 
+
+        <Button
+          variant="secondary"
+          className="w-full border-gray-200 bg-white text-gray-700 hover:bg-gray-50
                      dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
+          onClick={() => {
+            if (navigator.share) {
+              navigator.share({ title: note.title, text: `Check out these notes: ${note.title}`, url: window.location.href });
+            } else {
+              navigator.clipboard.writeText(window.location.href);
+              alert('Link copied to clipboard!');
+            }
+          }}
         >
           <Share2 size={18} className="mr-2" /> Share with Friends
         </Button>

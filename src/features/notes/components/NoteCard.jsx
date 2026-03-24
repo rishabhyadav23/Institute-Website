@@ -43,7 +43,7 @@ export const NoteCard = ({ note }) => {
           {note.title}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
-           <span className="font-semibold text-gray-700 dark:text-gray-300">{note.subject}</span>
+           <span className="font-medium text-gray-700 dark:text-gray-300">{note.subject}</span>
            <span>•</span>
            <span>{note.author}</span>
         </p>
@@ -63,7 +63,7 @@ export const NoteCard = ({ note }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 mt-auto">
+      <div className="flex gap-3 mt-auto relative z-10">
         <Button 
           variant="secondary" 
           size="sm" 
@@ -74,12 +74,24 @@ export const NoteCard = ({ note }) => {
           <Eye size={16} className="mr-2" /> Preview
         </Button>
         
-        <Button 
-          size="sm" 
-          onClick={handlePreview}
+        <Button
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (note.isPremium) {
+              handlePreview();
+            } else if (note.fileUrl) {
+              const link = document.createElement('a');
+              link.href = note.fileUrl;
+              link.download = `${note.title}.pdf`;
+              link.click();
+            } else {
+              handlePreview();
+            }
+          }}
           className={`flex-1 shadow-lg ${
-            note.isPremium 
-              ? 'bg-brand-900 hover:bg-brand-800 shadow-brand-900/20' 
+            note.isPremium
+              ? 'bg-brand-900 hover:bg-brand-800 shadow-brand-900/20'
               : 'bg-brand-600 hover:bg-brand-700 shadow-brand-600/20'
           }`}
         >

@@ -12,13 +12,14 @@ import { ForgotPasswordSuccess } from '../../features/auth/components/ForgotPass
 
 export const ForgotPasswordPage = () => {
   // Use Custom Hook
-  const { 
-    email, 
-    setEmail, 
-    isLoading, 
-    isSent, 
-    handleSendLink, 
-    resetFlow 
+  const {
+    email,
+    setEmail,
+    isLoading,
+    isSent,
+    error,
+    handleSendLink,
+    resetFlow
   } = useForgotPassword();
 
   return (
@@ -37,11 +38,12 @@ export const ForgotPasswordPage = () => {
         <div className="p-8">
           {/* 2. Conditional Body Section */}
           {!isSent ? (
-            <ForgotPasswordForm 
-              email={email} 
-              setEmail={setEmail} 
-              isLoading={isLoading} 
-              onSubmit={handleSendLink} 
+            <ForgotPasswordForm
+              email={email}
+              setEmail={setEmail}
+              isLoading={isLoading}
+              error={error}
+              onSubmit={handleSendLink}
             />
           ) : (
             <ForgotPasswordSuccess onReset={resetFlow} />

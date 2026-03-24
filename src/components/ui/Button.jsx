@@ -8,7 +8,7 @@ export const Button = ({
   isLoading = false,
   ...props 
 }) => {
-  const baseStyles = "font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-sans tracking-wide";
+  const baseStyles = "font-medium rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-sans tracking-wide focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 hover:-translate-y-0.5";
   
   const variants = {
     // Updated to use brand-900 (Maroon)
@@ -18,9 +18,6 @@ export const Button = ({
     secondary: "bg-white border-2 border-brand-900 text-brand-900 hover:bg-brand-50 active:scale-95",
     
     ghost: "text-gray-600 hover:bg-gray-100 hover:text-brand-900 dark:text-gray-300 dark:hover:bg-gray-800",
-    
-    // Accent can stay orange or match maroon theme
-    accent: "bg-orange-500 text-white hover:bg-orange-600 shadow-lg shadow-orange-500/20"
   };
 
   const sizes = {

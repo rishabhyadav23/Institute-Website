@@ -1,52 +1,52 @@
 export const MOCK_QUESTIONS = [
   {
     id: 1,
-    question: "Which of the following implies that data is stored in one or more servers?",
+    question: "A body starts from rest and moves with uniform acceleration of 4 m/s². What is the distance covered in the 5th second of its motion?",
     options: [
-      { id: 'a', text: "Distributed Systems" },
-      { id: 'b', text: "Centralized Systems" },
-      { id: 'c', text: "Decentralized Systems" },
-      { id: 'd', text: "Cloud Computing" }
+      { id: 'a', text: "18 m" },
+      { id: 'b', text: "20 m" },
+      { id: 'c', text: "16 m" },
+      { id: 'd', text: "22 m" }
     ]
   },
   {
     id: 2,
-    question: "What is the time complexity of Binary Search operation?",
+    question: "The molecular formula of glucose is:",
     options: [
-      { id: 'a', text: "O(n)" },
-      { id: 'b', text: "O(n log n)" },
-      { id: 'c', text: "O(log n)" },
-      { id: 'd', text: "O(1)" }
+      { id: 'a', text: "C₆H₁₂O₆" },
+      { id: 'b', text: "C₁₂H₂₂O₁₁" },
+      { id: 'c', text: "C₆H₆" },
+      { id: 'd', text: "C₂H₅OH" }
     ]
   },
   {
     id: 3,
-    question: "Which hook is used to perform side effects in React?",
+    question: "If sin θ + cos θ = √2, then the value of tan θ + cot θ is:",
     options: [
-      { id: 'a', text: "useState" },
-      { id: 'b', text: "useEffect" },
-      { id: 'c', text: "useContext" },
-      { id: 'd', text: "useReducer" }
+      { id: 'a', text: "1" },
+      { id: 'b', text: "2" },
+      { id: 'c', text: "√2" },
+      { id: 'd', text: "3" }
     ]
   },
   {
     id: 4,
-    question: "In CSS, which property is used to change the background color?",
+    question: "Which organelle is known as the 'powerhouse of the cell'?",
     options: [
-      { id: 'a', text: "color" },
-      { id: 'b', text: "bgcolor" },
-      { id: 'c', text: "background-color" },
-      { id: 'd', text: "bg-color" }
+      { id: 'a', text: "Nucleus" },
+      { id: 'b', text: "Ribosome" },
+      { id: 'c', text: "Mitochondria" },
+      { id: 'd', text: "Golgi apparatus" }
     ]
   },
   {
     id: 5,
-    question: "What does HTML stand for?",
+    question: "Two charges of +2μC and -2μC are placed 10 cm apart. The electric field at the midpoint between them is:",
     options: [
-      { id: 'a', text: "Hyperlinks and Text Markup Language" },
-      { id: 'b', text: "Hyper Text Markup Language" },
-      { id: 'c', text: "Home Tool Markup Language" },
-      { id: 'd', text: "Hyper Tool Multi Language" }
+      { id: 'a', text: "Zero" },
+      { id: 'b', text: "7.2 × 10⁶ N/C directed towards +2μC" },
+      { id: 'c', text: "7.2 × 10⁶ N/C directed towards -2μC" },
+      { id: 'd', text: "14.4 × 10⁶ N/C directed towards -2μC" }
     ]
   }
 ];

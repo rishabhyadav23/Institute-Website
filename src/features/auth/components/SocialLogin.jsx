@@ -1,14 +1,172 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
+import api from '../../../api/axiosConfig';
 
-export const SocialLogin = () => {
+export const SocialLogin = ({ mode = 'login' }) => {
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleOAuthSuccess = async (provider, tokenData) => {
+    try {
+      const response = await api.post(`/auth/oauth/${provider}`, tokenData);
+      const result = response.data.data || response.data;
+      const token = result.token;
+      const userData = { fullName: result.fullName, email: result.email, role: result.role };
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
+      // Force page reload to update AuthContext state from localStorage
+      window.location.href = result.role === 'ADMIN' ? '/admin' : '/';
+    } catch (err) {
+      setError(err?.response?.data?.message || `${provider} login failed. Please try again.`);
+    }
+  };
+
+  // ===== GOOGLE =====
+  const handleGoogleLogin = useCallback(() => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      setError('Google login is not configured yet.');
+      return;
+    }
+
+    setGoogleLoading(true);
+    setError('');
+
+    // Load Google Identity Services script if not loaded
+    if (!window.google?.accounts) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => initializeGoogle(clientId);
+      script.onerror = () => {
+        setError('Failed to load Google login. Check your internet connection.');
+        setGoogleLoading(false);
+      };
+      document.body.appendChild(script);
+    } else {
+      initializeGoogle(clientId);
+    }
+  }, []);
+
+  const initializeGoogle = (clientId) => {
+    try {
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async (response) => {
+          if (response.credential) {
+            await handleOAuthSuccess('google', { idToken: response.credential });
+          }
+          setGoogleLoading(false);
+        },
+      });
+      // Use the One Tap or popup
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // Fallback: use button-triggered popup
+          const btn = document.createElement('div');
+          btn.id = 'g-signin-btn';
+          btn.style.display = 'none';
+          document.body.appendChild(btn);
+          window.google.accounts.id.renderButton(btn, { type: 'icon', size: 'large' });
+          btn.querySelector('div[role="button"]')?.click();
+          setTimeout(() => btn.remove(), 100);
+          setGoogleLoading(false);
+        }
+      });
+    } catch {
+      setError('Google login initialization failed.');
+      setGoogleLoading(false);
+    }
+  };
+
+  // ===== APPLE =====
+  const handleAppleLogin = useCallback(() => {
+    const clientId = import.meta.env.VITE_APPLE_CLIENT_ID;
+    if (!clientId) {
+      setError('Apple login is not configured yet.');
+      return;
+    }
+
+    setAppleLoading(true);
+    setError('');
+
+    if (!window.AppleID) {
+      const script = document.createElement('script');
+      script.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+      script.async = true;
+      script.onload = () => initializeApple(clientId);
+      script.onerror = () => {
+        setError('Failed to load Apple login.');
+        setAppleLoading(false);
+      };
+      document.body.appendChild(script);
+    } else {
+      initializeApple(clientId);
+    }
+  }, []);
+
+  const initializeApple = async (clientId) => {
+    try {
+      window.AppleID.auth.init({
+        clientId,
+        scope: 'name email',
+        redirectURI: import.meta.env.VITE_APPLE_REDIRECT_URI || window.location.origin,
+        usePopup: true,
+      });
+
+      const response = await window.AppleID.auth.signIn();
+      if (response.authorization) {
+        await handleOAuthSuccess('apple', {
+          idToken: response.authorization.id_token,
+          authorizationCode: response.authorization.code,
+          fullName: response.user ? `${response.user.name?.firstName || ''} ${response.user.name?.lastName || ''}`.trim() : null,
+        });
+      }
+    } catch (err) {
+      if (err.error !== 'popup_closed_by_user') {
+        setError('Apple login failed. Please try again.');
+      }
+    } finally {
+      setAppleLoading(false);
+    }
+  };
+
   return (
     <>
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
-          <GoogleIcon className="w-5 h-5" /> Google
+        <button
+          onClick={handleGoogleLogin}
+          disabled={googleLoading}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-sm font-semibold text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {googleLoading ? (
+            <div className="w-5 h-5 border-2 border-gray-300 border-t-brand-600 rounded-full animate-spin" />
+          ) : (
+            <GoogleIcon className="w-5 h-5" />
+          )}
+          Google
         </button>
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-sm font-semibold text-gray-700 dark:text-gray-300">
-          <AppleIcon className="w-5 h-5" /> Apple
+        <button
+          onClick={handleAppleLogin}
+          disabled={appleLoading}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-sm font-semibold text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {appleLoading ? (
+            <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+          ) : (
+            <AppleIcon className="w-5 h-5" />
+          )}
+          Apple
         </button>
       </div>
 
@@ -17,7 +175,9 @@ export const SocialLogin = () => {
           <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
         </div>
         <div className="relative flex justify-center text-xs uppercase tracking-wider">
-          <span className="bg-white dark:bg-gray-900 px-3 text-gray-400">Or Login with Email</span>
+          <span className="bg-white dark:bg-gray-900 px-3 text-gray-400">
+            {mode === 'signup' ? 'Or Sign up with Email' : 'Or Login with Email'}
+          </span>
         </div>
       </div>
     </>

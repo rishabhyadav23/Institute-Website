@@ -1,7 +1,7 @@
-import React from 'react';
-import { 
-  Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, 
-  SkipForward, MessageSquare, Captions 
+import React, { useState } from 'react';
+import {
+  Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings,
+  MessageSquare, Captions, Check
 } from 'lucide-react';
 import { useLivePlayer } from '../../hooks/useLivePlayer';
 
@@ -9,12 +9,32 @@ export const CustomVideoPlayer = ({ url, title, isLive, toggleChat }) => {
   const { videoRef, containerRef, state, actions } = useLivePlayer();
   const { isPlaying, volume, isMuted, currentTime, duration, isFullscreen, showControls } = state;
   const { togglePlay, handleVolumeChange, toggleMute, toggleFullscreen, handleTimeUpdate, handleSeek } = actions;
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [seekTime, setSeekTime] = useState(0);
+  const [tooltipX, setTooltipX] = useState(0);
+  const [subtitlesOn, setSubtitlesOn] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [quality, setQuality] = useState('720p');
 
   // Format Time Helper
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const handleSliderInput = (e) => {
+    const val = parseFloat(e.target.value);
+    setSeekTime(val);
+    setIsSeeking(true);
+    const rect = e.target.getBoundingClientRect();
+    const percent = (val - e.target.min) / (e.target.max - e.target.min);
+    setTooltipX(rect.width * percent);
+  };
+
+  const handleSliderChange = (e) => {
+    handleSeek(e);
+    setIsSeeking(false);
   };
 
   return (
@@ -44,13 +64,24 @@ export const CustomVideoPlayer = ({ url, title, isLive, toggleChat }) => {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full mb-4 group/slider">
-          <input 
-            type="range" 
-            min="0" 
-            max={duration || 100} 
-            value={currentTime} 
-            onChange={handleSeek}
+        <div className="w-full mb-4 group/slider relative">
+          {isSeeking && (
+            <div
+              className="absolute -top-10 bg-black/90 text-white text-xs font-mono px-2 py-1 rounded pointer-events-none whitespace-nowrap"
+              style={{ left: `${tooltipX}px`, transform: 'translateX(-50%)' }}
+            >
+              {formatTime(seekTime)}
+            </div>
+          )}
+          <input
+            type="range"
+            min="0"
+            max={duration || 100}
+            value={currentTime}
+            onInput={handleSliderInput}
+            onChange={handleSliderChange}
+            onMouseUp={() => setIsSeeking(false)}
+            onTouchEnd={() => setIsSeeking(false)}
             className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-brand-500 hover:h-1.5 transition-all"
           />
         </div>
@@ -85,15 +116,45 @@ export const CustomVideoPlayer = ({ url, title, isLive, toggleChat }) => {
           </div>
 
           <div className="flex items-center gap-4">
-             {/* Subtitles (Mock) */}
-             <button className="hover:text-brand-400 transition-colors" title="Subtitles">
+             {/* Subtitles Toggle */}
+             <button
+               onClick={() => setSubtitlesOn(!subtitlesOn)}
+               className={`relative hover:text-brand-400 transition-colors ${subtitlesOn ? 'text-brand-400' : ''}`}
+               title={subtitlesOn ? 'Subtitles On' : 'Subtitles Off'}
+             >
                <Captions size={20} />
+               {subtitlesOn && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-brand-400 rounded-full" />}
              </button>
 
-             {/* Quality (Mock) */}
-             <button className="hover:text-brand-400 transition-colors" title="Quality">
-               <Settings size={20} />
-             </button>
+             {/* Quality Settings */}
+             <div className="relative">
+               <button
+                 onClick={() => setShowSettings(!showSettings)}
+                 className={`hover:text-brand-400 transition-colors ${showSettings ? 'text-brand-400' : ''}`}
+                 title="Quality"
+               >
+                 <Settings size={20} className={showSettings ? 'animate-spin' : ''} style={showSettings ? { animationDuration: '2s' } : {}} />
+               </button>
+               {showSettings && (
+                 <div className="absolute bottom-10 right-0 bg-gray-900/95 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden min-w-[140px] shadow-2xl">
+                   <div className="px-3 py-2 border-b border-gray-700">
+                     <p className="text-xs font-bold text-gray-400 uppercase">Quality</p>
+                   </div>
+                   {['1080p', '720p', '480p', '360p', 'Auto'].map((q) => (
+                     <button
+                       key={q}
+                       onClick={() => { setQuality(q); setShowSettings(false); }}
+                       className={`w-full px-3 py-2 text-left text-sm flex items-center justify-between hover:bg-white/10 transition-colors ${
+                         quality === q ? 'text-brand-400 font-bold' : 'text-white'
+                       }`}
+                     >
+                       {q}
+                       {quality === q && <Check size={14} />}
+                     </button>
+                   ))}
+                 </div>
+               )}
+             </div>
 
              {/* Toggle Chat (Mobile/Desktop) */}
              <button onClick={toggleChat} className="lg:hidden hover:text-brand-400 transition-colors">
@@ -108,6 +169,15 @@ export const CustomVideoPlayer = ({ url, title, isLive, toggleChat }) => {
 
         </div>
       </div>
+
+      {/* Subtitle Display */}
+      {subtitlesOn && (
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+          <div className="bg-black/80 text-white text-sm px-4 py-2 rounded-lg max-w-md text-center">
+            Subtitles will appear here during playback
+          </div>
+        </div>
+      )}
 
       {/* Center Play Button Animation */}
       {!isPlaying && showControls && (

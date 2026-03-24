@@ -25,8 +25,6 @@ export const TestSeriesPage = () => {
 
   // --- THE MAIN HANDLER ---
   const handleTestAction = (test, actionType) => {
-    console.log("Action Clicked:", actionType, test.title); // Debugging Log
-
     if (actionType === 'unlock') {
       // 1. Agar Unlock hai -> Modal kholo
       setSelectedTest(test);

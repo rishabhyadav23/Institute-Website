@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Send, Heart, MoreVertical, X } from 'lucide-react';
+import { Send, Heart, X } from 'lucide-react';
 import { MOCK_CHAT } from '../../api/liveData';
 
 export const LiveChat = ({ onClose }) => {
   const [messages, setMessages] = useState(MOCK_CHAT);
   const [inputText, setInputText] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(142);
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -70,11 +72,23 @@ export const LiveChat = ({ onClose }) => {
              value={inputText}
              onChange={(e) => setInputText(e.target.value)}
              placeholder="Chat publicly..."
-             className="w-full pl-4 pr-12 py-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:border-brand-500 outline-none text-sm"
+             className="w-full pl-4 pr-12 py-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:border-brand-500 outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-             <button type="button" className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors">
-               <Heart size={18} />
+             <button
+               type="button"
+               onClick={() => {
+                 setLiked(!liked);
+                 setLikeCount(prev => liked ? prev - 1 : prev + 1);
+               }}
+               className={`p-2 rounded-full transition-all duration-300 flex items-center gap-1 ${
+                 liked
+                   ? 'text-red-500 bg-red-50 dark:bg-red-900/20 scale-110'
+                   : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
+               }`}
+             >
+               <Heart size={18} className={liked ? 'fill-current' : ''} />
+               <span className="text-[10px] font-bold">{likeCount}</span>
              </button>
              <button type="submit" className="p-2 text-brand-600 hover:bg-brand-50 rounded-full transition-colors">
                <Send size={18} />

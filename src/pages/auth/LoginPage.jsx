@@ -12,13 +12,14 @@ import { LoginForm } from '../../features/auth/components/LoginForm';
 
 export const LoginPage = () => {
   // Use Custom Hook
-  const { 
-    formData, 
-    handleChange, 
-    showPassword, 
-    togglePassword, 
-    isLoading, 
-    handleSubmit 
+  const {
+    formData,
+    handleChange,
+    showPassword,
+    togglePassword,
+    isLoading,
+    error,
+    handleSubmit
   } = useLogin();
 
   return (
@@ -33,7 +34,11 @@ export const LoginPage = () => {
       <div className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800 relative z-10 overflow-hidden backdrop-blur-xl">
         
         {/* 1. Header */}
-        <LoginHeader />
+        <AuthHeader
+          title="Welcome Back"
+          subtitle="Sign in to continue your preparation"
+          icon={<User className="w-8 h-8 text-white" />}
+        />
 
         <div className="p-8 sm:p-10">
           
@@ -41,11 +46,12 @@ export const LoginPage = () => {
           <SocialLogin />
 
           {/* 3. Login Form */}
-          <LoginForm 
+          <LoginForm
             formData={formData}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             isLoading={isLoading}
+            error={error}
             showPassword={showPassword}
             togglePassword={togglePassword}
           />

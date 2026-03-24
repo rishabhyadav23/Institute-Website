@@ -1,6 +1,4 @@
 import React from 'react';
-import { ChevronLeft } from 'lucide-react';
-
 
 // Logic
 import { useNotes } from '../../features/notes/hooks/useNotes';

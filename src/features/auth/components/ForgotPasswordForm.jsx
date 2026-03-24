@@ -2,7 +2,7 @@ import React from 'react';
 import { Mail } from 'lucide-react';
 import { Button } from '../../../components/ui/Button'; // Adjusted path to shared UI
 
-export const ForgotPasswordForm = ({ email, setEmail, isLoading, onSubmit }) => {
+export const ForgotPasswordForm = ({ email, setEmail, isLoading, error, onSubmit }) => {
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       <div>
@@ -11,8 +11,8 @@ export const ForgotPasswordForm = ({ email, setEmail, isLoading, onSubmit }) => 
         </label>
         <div className="relative group">
           <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-600 transition-colors w-5 h-5" />
-          <input 
-            type="email" 
+          <input
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
@@ -22,9 +22,15 @@ export const ForgotPasswordForm = ({ email, setEmail, isLoading, onSubmit }) => 
         </div>
       </div>
 
-      <Button 
-        type="submit" 
-        className="w-full py-3.5 rounded-xl text-lg shadow-lg" 
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-xl px-4 py-3">
+          {error}
+        </div>
+      )}
+
+      <Button
+        type="submit"
+        className="w-full py-3.5 rounded-xl text-lg shadow-lg"
         isLoading={isLoading}
       >
         Send Reset Link

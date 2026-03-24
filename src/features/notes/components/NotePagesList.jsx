@@ -30,7 +30,7 @@ export const NotePagesList = ({ note }) => {
             
             {/* Watermark */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-45 text-gray-100 text-4xl font-bold uppercase pointer-events-none select-none">
-              Masterbaazi
+              A.I.S. Meerut
             </div>
 
             <div className="absolute bottom-6 right-6 text-gray-400 font-mono">

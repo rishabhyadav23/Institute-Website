@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api/authService';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useSignup = () => {
   const navigate = useNavigate();
-  
+  const { signup } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -12,6 +13,7 @@ export const useSignup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,13 +25,15 @@ export const useSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+    setError('');
+
     try {
-      await registerUser(formData);
-      // On success, redirect to home or dashboard
-      navigate('/'); 
-    } catch (error) {
-      console.error("Signup failed", error);
+      // Use AuthContext.signup so token/user are stored and isAuthenticated becomes true
+      await signup(formData);
+      navigate('/');
+    } catch (err) {
+      const message = err?.response?.data?.message || 'Registration failed. Please check your details and try again.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -41,6 +45,7 @@ export const useSignup = () => {
     showPassword,
     togglePassword,
     isLoading,
+    error,
     handleSubmit
   };
 };

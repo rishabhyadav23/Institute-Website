@@ -51,7 +51,7 @@ export const LiveClassCard = ({ session, onJoin }) => {
         </h3>
         
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          by <span className="font-semibold text-gray-800 dark:text-gray-200">{session.tutor}</span>
+          by <span className="font-normal text-gray-800 dark:text-gray-200">{session.tutor}</span>
         </p>
 
         <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">

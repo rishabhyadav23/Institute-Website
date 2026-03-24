@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, FileText, HelpCircle, Layout } from 'lucide-react';
+import { ChevronLeft, FileText } from 'lucide-react';
 import { CustomVideoPlayer } from '../../features/live/components/player/CustomVideoPlayer';
 import { LiveChat } from '../../features/live/components/chat/LiveChat';
 
@@ -12,9 +12,22 @@ export const LiveClassroomPage = () => {
   const [activeTab, setActiveTab] = useState('chat');
   const [isChatOpen, setIsChatOpen] = useState(true);
 
-  // Fallback if accessed directly
+  // Fallback if accessed directly without navigation state
   if (!session) {
-    return <div className="p-10 text-center">Session not found. <button onClick={() => navigate('/live')}>Go Back</button></div>;
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-white text-xl font-bold mb-2">Session not found</p>
+          <p className="text-gray-400 text-sm mb-6">Please navigate from the Live Classes page to join a session.</p>
+          <button
+            onClick={() => navigate('/live')}
+            className="bg-brand-900 hover:bg-brand-800 text-white px-6 py-3 rounded-xl font-bold transition-colors"
+          >
+            Go to Live Classes
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

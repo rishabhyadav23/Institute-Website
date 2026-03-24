@@ -5,18 +5,20 @@ export const useForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSendLink = async (e) => {
     e.preventDefault();
     if (!email) return;
 
     setIsLoading(true);
+    setError('');
     try {
       await requestPasswordReset(email);
       setIsSent(true);
-    } catch (error) {
-      console.error("Failed to send reset link", error);
-      // Handle error state here if needed
+    } catch (err) {
+      const message = err?.response?.data?.message || 'Failed to send reset link. Please check your email and try again.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -25,6 +27,7 @@ export const useForgotPassword = () => {
   const resetFlow = () => {
     setIsSent(false);
     setEmail('');
+    setError('');
   };
 
   return {
@@ -32,6 +35,7 @@ export const useForgotPassword = () => {
     setEmail,
     isLoading,
     isSent,
+    error,
     handleSendLink,
     resetFlow
   };

@@ -7,32 +7,32 @@ export const LIVE_TABS = [
 export const LIVE_CLASSES = [
   {
     id: 101,
-    title: "Mastering React Hooks & Performance",
-    tutor: "Hitesh Choudhary",
-    subject: "Web Development",
-    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
-    status: "live", // live, upcoming, ended
-    viewers: 1240,
+    title: "JEE Physics - Electrostatics Masterclass",
+    tutor: "Mr. Rajesh Sharma",
+    subject: "JEE Physics",
+    thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+    status: "live",
+    viewers: 320,
     time: "Started 15 mins ago",
-    videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" // Sample Video
+    videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   },
   {
     id: 102,
-    title: "Strategy for UPSC Prelims 2025",
-    tutor: "Dr. Vikas Divyakirti",
-    subject: "UPSC Guidance",
-    thumbnail: "https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?auto=format&fit=crop&w=800&q=80",
+    title: "NEET Chemistry - Organic Reactions & Mechanisms",
+    tutor: "Dr. Neha Gupta",
+    subject: "NEET Chemistry",
+    thumbnail: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
     status: "live",
-    viewers: 8500,
+    viewers: 280,
     time: "Started 5 mins ago",
     videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
   },
   {
     id: 103,
-    title: "Rotational Motion - Physics One Shot",
-    tutor: "NV Sir",
-    subject: "JEE Physics",
-    thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+    title: "NDA Maths - Trigonometry One Shot",
+    tutor: "Mr. Vikram Singh",
+    subject: "NDA Mathematics",
+    thumbnail: "https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?auto=format&fit=crop&w=800&q=80",
     status: "upcoming",
     viewers: 0,
     time: "Today, 6:00 PM",
@@ -40,12 +40,12 @@ export const LIVE_CLASSES = [
   },
   {
     id: 104,
-    title: "Complete Modern History Marathon",
-    tutor: "Avadh Ojha Sir",
-    subject: "History",
-    thumbnail: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=800&q=80",
+    title: "NEET Biology - Genetics & Evolution Marathon",
+    tutor: "Dr. Priya Verma",
+    subject: "NEET Biology",
+    thumbnail: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=800&q=80",
     status: "ended",
-    viewers: 45000,
+    viewers: 450,
     time: "Streamed 2 days ago",
     videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
   }

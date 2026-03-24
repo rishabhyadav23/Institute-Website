@@ -13,12 +13,35 @@ export const useCourses = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [filteredCourses, setFilteredCourses] = useState(ALL_COURSES);
 
-  // Initialize Category from Navigation State
+  // Initialize Category from Navigation State and search/category from URL params
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get('search');
+    const categoryParam = params.get('category');
+
     if (location.state?.category) {
       setSelectedCategory(location.state.category);
+    } else if (categoryParam) {
+      // Map URL category param to data category values
+      const categoryMap = {
+        'IIT JEE': 'JEE',
+        'NEET': 'NEET',
+        'NDA': 'NDA',
+        'NDA / Airforce': 'NDA',
+        'NDA/Airforce': 'NDA',
+        'SSC JE': 'SSC JE',
+        'Classes 9-10': 'Board Exams',
+        'Classes 11-12': 'Board Exams',
+        'Board Exams': 'Board Exams',
+      };
+      const mappedCategory = categoryMap[categoryParam] || categoryParam;
+      setSelectedCategory(mappedCategory);
     }
-  }, [location.state]);
+
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+  }, [location.state, location.search]);
 
   // Main Filtering Logic
   useEffect(() => {

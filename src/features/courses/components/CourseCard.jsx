@@ -55,7 +55,7 @@ export const CourseCard = ({ course }) => {
               <span className="text-xs text-gray-400 line-through">₹{course.originalPrice}</span>
             </div>
           </div>
-          <Button size="sm" onClick={() => navigate(`/course/${course.id}`)} className="shadow-none">
+          <Button size="sm" onClick={() => navigate(`/courses/${course.id}`)} className="shadow-none">
             Enroll
           </Button>
         </div>

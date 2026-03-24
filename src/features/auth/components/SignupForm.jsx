@@ -1,14 +1,16 @@
 import React from 'react';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 
-export const SignupForm = ({ 
-  formData, 
-  handleChange, 
-  handleSubmit, 
-  isLoading, 
-  showPassword, 
-  togglePassword 
+export const SignupForm = ({
+  formData,
+  handleChange,
+  handleSubmit,
+  isLoading,
+  error,
+  showPassword,
+  togglePassword
 }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -64,13 +66,20 @@ export const SignupForm = ({
         </div>
       </div>
 
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-xl px-4 py-3">
+          {error}
+        </div>
+      )}
+
       {/* Terms Checkbox */}
       <div className="flex items-start gap-3 pt-2">
         <div className="flex items-center h-5">
           <input id="terms" type="checkbox" className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-gray-300" required />
         </div>
         <label htmlFor="terms" className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-          I agree to the <a href="#" className="text-brand-600 hover:underline">Terms of Service</a> and <a href="#" className="text-brand-600 hover:underline">Privacy Policy</a>.
+          I agree to the <Link to="/contact" className="text-brand-600 hover:underline">Terms of Service</Link> and <Link to="/contact" className="text-brand-600 hover:underline">Privacy Policy</Link>.
         </label>
       </div>
 

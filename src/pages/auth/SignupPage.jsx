@@ -7,18 +7,19 @@ import { useSignup } from '../../features/auth/hooks/useSignup';
 
 // Components
 import { AuthHeader } from '../../features/auth/components/AuthHeader';
-// Reusing SocialLogin from the Login Feature (Make sure to export it!)
-import { SocialLogin } from '../../features/auth/components/SocialLogin'; 
+import { SocialLogin } from '../../features/auth/components/SocialLogin';
+import { SignupForm } from '../../features/auth/components/SignupForm'; 
 
 export const SignupPage = () => {
   // Use Custom Hook
-  const { 
-    formData, 
-    handleChange, 
-    showPassword, 
-    togglePassword, 
-    isLoading, 
-    handleSubmit 
+  const {
+    formData,
+    handleChange,
+    showPassword,
+    togglePassword,
+    isLoading,
+    error,
+    handleSubmit
   } = useSignup();
 
   return (
@@ -35,21 +36,25 @@ export const SignupPage = () => {
       <div className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-white/20 dark:border-gray-800 relative z-10 overflow-hidden backdrop-blur-xl">
         
         {/* 1. Header */}
-        <AuthHeader />
+        <AuthHeader
+          title="Create Account"
+          subtitle="Start your learning journey today"
+          icon={<User className="w-8 h-8 text-white" />}
+        />
 
         {/* Card Body */}
         <div className="p-8 sm:p-10">
           
           {/* 2. Social Buttons */}
-          {/* If SocialLogin is strict about "Login", you might need to update it to accept a prop */}
-          <SocialLogin /> 
+          <SocialLogin mode="signup" />
 
           {/* 3. Signup Form */}
-          <SignupForm 
+          <SignupForm
             formData={formData}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             isLoading={isLoading}
+            error={error}
             showPassword={showPassword}
             togglePassword={togglePassword}
           />
